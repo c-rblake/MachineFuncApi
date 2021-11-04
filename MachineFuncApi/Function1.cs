@@ -56,8 +56,8 @@ namespace MachineFuncApi
             var machine = new Machine { Name = machineDto.Name };
 
             //2. Table Storage 50
-           
 
+            await MachineTable.AddAsync();
 
 
             return new OkObjectResult();
