@@ -35,13 +35,14 @@ namespace MachineFuncApi
 
         [FunctionName("Create")]
         public static async Task<IActionResult> Create(
-    [HttpTrigger(AuthorizationLevel.Function, "post", Route = "machines")] HttpRequest req, //localhost/api/route
-    ILogger log)
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "machines")] HttpRequest req, //localhost/api/route //TRIGGER, INPUT BINDER, OUTPUT BINDER
+        [Table()] //3. DB nuggets Microsoft.Azure.Webjobs.Extensions.Storage 4.05. + Microsoft.Azure.Cosmos.Table 55
+        ILogger log)
         {
             log.LogInformation("Create new Machine."); // Logs are the best, use them.
 
 
-            //No dependency Injection. Add Startup class if needed.
+            //1. No dependency Injection. Add Startup class if needed. 25
             //string name = req.Query["name"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -52,7 +53,7 @@ namespace MachineFuncApi
 
             var machine = new Machine { Name = machineDto.Name };
 
-
+            //2. Table Storage 50
            
 
 
