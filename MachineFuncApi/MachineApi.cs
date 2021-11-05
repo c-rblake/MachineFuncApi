@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using MachineFuncApi.Models;
 using MachineFuncApi.Extensions;
+using Microsoft.Azure.Cosmos.Table;
+using System.Linq;
 
 namespace MachineFuncApi
 {
@@ -62,6 +64,26 @@ namespace MachineFuncApi
 
             return new OkObjectResult(machine); //10 Go to Postman and check. Needs Azure function core tools installed. Ok 200
             //11 Check in Storage Emulator - Microsoft Azure Storage Emulator Local Attached. ToDO MISSING STATUS AND LOG.
+        }
+
+        //19 Get Function
+        //Clear out all Code Comments https://stackoverflow.com/questions/3885723/how-to-delete-all-comments-in-a-selected-code-section
+        [FunctionName("Get")]
+        public static async Task<IActionResult> Get(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "machines")] HttpRequest req,         
+        [Table("Machines", Connection = "AzureWebJobsStorage")] CloudTable MachineTable, //20. Cloud Table. COSMOS TABLE       
+        ILogger log)
+        {
+            log.LogInformation("Get all Machines.");
+
+            var query = new TableQuery<MachineTableEntity>(); //21 Queries go here. Left for null returns all.
+            var result = await MachineTable.ExecuteQuerySegmentedAsync(query, null); //Returns Array of results
+
+            //Nested List in a Class
+            var response = new MachineList { Machines = result.Select(Mapper.ToMachine).ToList() }; //Send func over Lambda. 22
+            //var response new Mahincelist { Machines = result.Select(m=> m.ToItem().ToList()); 
+
+            return new OkObjectResult(response);             
         }
     }
 }
