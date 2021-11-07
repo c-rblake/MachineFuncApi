@@ -38,7 +38,8 @@ namespace MachineFuncApi
 
         [FunctionName("Create")]
         public static async Task<IActionResult> Create(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "machines")] HttpRequest req, //localhost/api/route //TRIGGER, INPUT BINDER, OUTPUT BINDER
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "machines")] HttpRequest req, //localhost/api/route //TRIGGER, INPUT BINDER, OUTPUT BINDER
+        // Anonymous Authorization for post to work on web?? TODO
         [Table("Machines", Connection = "AzureWebJobsStorage")] //3. DB nuggets Microsoft.Azure.Webjobs.Extensions.Storage 4.05. + Microsoft.Azure.Cosmos.Table 55
         //4. Connection from APP settings 70 //11 Machines will be the Name of the Table
         IAsyncCollector<MachineTableEntity> MachineTable, //5. IAsyncCollector + TableEntity
@@ -85,5 +86,33 @@ namespace MachineFuncApi
 
             return new OkObjectResult(response);             
         }
+        // 23. Put function find all ctrl H + Regex  //.*
+        [FunctionName("Put")] //Does not WORK.
+        public static async Task<IActionResult> Put(
+        [HttpTrigger(AuthorizationLevel.Function, "put", Route = "machines/{machineid}")] HttpRequest req, 
+        [Table("Machines", Connection = "AzureWebJobsStorage")] CloudTable MachineTable, //25. Work with CloudTable COSMOS
+        string machineid, // 24. To check ID MachineId for binding to work properly?
+        ILogger log)
+        {
+            log.LogInformation("Update Machine."); 
+                        
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var machine = JsonConvert.DeserializeObject<Machine>(requestBody); //26 MUST HAVE ETAG MACHINE OBJECT
+            // Todo Make a MachineUpdateModel without the ID.
+
+            if (machine is null || machine.MachineId != machineid) return new BadRequestResult();
+
+            //27. Create Table Entity
+            var tableEntity = machine.ToTableEntity();
+            tableEntity.ETag = "*"; //Default etag.
+            //29 TABLE ENTITY MUST HAVE ETAG
+            var operation = TableOperation.Replace(tableEntity); //28. This is WHy need COSMOS CloudTable. Else it will not work.
+
+            await MachineTable.ExecuteAsync(operation); 
+
+            return new NoContentResult();                     
+        }
+
+        // 2.1 ToDoQueue Trigger
     }
 }
