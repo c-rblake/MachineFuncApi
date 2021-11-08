@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using MachineFuncApi.Models;
+//using MachineFuncApi.Shared; Trouble with asp vs .net
 using MachineFuncApi.Extensions;
 using Microsoft.Azure.Cosmos.Table;
 using System.Linq;
@@ -144,40 +145,40 @@ namespace MachineFuncApi
             return new NoContentResult();
         }
 
-        [FunctionName("RemoveComplete")] // 2.4 Start from scratch. Creates a QUEUE
-        public static async Task RemoveComplete(
-            [TimerTrigger("0 */1 * * * *")]TimerInfo timer, // 2.5 Cron-expression 
-            [Table("Machines", Connection = "AzureWebJobsStorage")] CloudTable machineTable,
-            [Queue("MachineQueue", Connection = "AzureWebJobsStorage")] IAsyncCollector<Machine> queuedMachines, //2.6 On the fly Queue creation
-            ILogger log)
-        {
-            log.LogInformation("RemoveComplete Initiated...");
+        //[FunctionName("RemoveComplete")] // 2.4 Start from scratch. Creates a QUEUE
+        //public static async Task RemoveComplete(
+        //    [TimerTrigger("0 */1 * * * *")]TimerInfo timer, // 2.5 Cron-expression 
+        //    [Table("Machines", Connection = "AzureWebJobsStorage")] CloudTable machineTable,
+        //    [Queue("MachineQueue", Connection = "AzureWebJobsStorage")] IAsyncCollector<Machine> queuedMachines, //2.6 On the fly Queue creation
+        //    ILogger log)
+        //{
+        //    log.LogInformation("RemoveComplete Initiated...");
 
-            var query = machineTable.CreateQuery<MachineTableEntity>().Where(m => m.Status == Status.Offline).AsTableQuery(); // 2.7 Import Cosmos
+        //    var query = machineTable.CreateQuery<MachineTableEntity>().Where(m => m.Status == Status.Offline).AsTableQuery(); // 2.7 Import Cosmos
 
-            var result = await machineTable.ExecuteQuerySegmentedAsync(query, null); // 2.8 Execute
+        //    var result = await machineTable.ExecuteQuerySegmentedAsync(query, null); // 2.8 Execute
 
-            foreach(var machineTableEntity in result)
-            {
-                await queuedMachines.AddAsync(machineTableEntity.ToMachine());
-                await machineTable.ExecuteAsync(TableOperation.Delete(machineTableEntity));
+        //    foreach(var machineTableEntity in result)
+        //    {
+        //        await queuedMachines.AddAsync(machineTableEntity.ToMachine());
+        //        await machineTable.ExecuteAsync(TableOperation.Delete(machineTableEntity));
 
-            }
+        //    }
 
-        }
-        //2.9 Queue Trigger to Blob storage
-        [FunctionName("GetRemoveFromQueue")]
-        public static async Task GetRemoveFromQueue(
-            [QueueTrigger("MachineQueue", Connection = "AzureWebJobsStorage")] Machine machine,
-            [Blob("done", Connection = "AzureWebJobsStorage")] CloudBlobContainer blobContainer, //3.0 Ms azure storage blob
-             ILogger log)
-        {
-            log.LogInformation("Queue trigger started...");
+        //}
+        ////2.9 Queue Trigger to Blob storage
+        //[FunctionName("GetRemoveFromQueue")]
+        //public static async Task GetRemoveFromQueue(
+        //    [QueueTrigger("MachineQueue", Connection = "AzureWebJobsStorage")] Machine machine,
+        //    [Blob("done", Connection = "AzureWebJobsStorage")] CloudBlobContainer blobContainer, //3.0 Ms azure storage blob
+        //     ILogger log)
+        //{
+        //    log.LogInformation("Queue trigger started...");
 
-            await blobContainer.CreateIfNotExistsAsync(); // 3.1 Blob must be created if there isnt one
-            var blob = blobContainer.GetBlockBlobReference($"{machine.MachineId}.txt"); //create a textfile out the item
-            await blob.UploadTextAsync($"{machine.MachineId} is completed");
-        }
+        //    await blobContainer.CreateIfNotExistsAsync(); // 3.1 Blob must be created if there isnt one
+        //    var blob = blobContainer.GetBlockBlobReference($"{machine.MachineId}.txt"); //create a textfile out the item
+        //    await blob.UploadTextAsync($"{machine.MachineId} is completed");
+        //}
 
 
     }
