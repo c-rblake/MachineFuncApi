@@ -2,11 +2,20 @@
 
 <h3>Machine Overview</h3>
 
+@foreach (var item in machineList.Machines)
+{
+    <li>@item.Name</li>
+}
+
+
 @code{
 
     private MachineList machineList = new MachineList();
 
-
+    protected override async Task OnInitializedAsync()
+    {
+        machineList = await httpClient.GetFromJsonAsync<MachineList>("api/machines");
+    }
 
 
 }
