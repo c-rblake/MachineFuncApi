@@ -2,13 +2,18 @@
 
 <h3>Machine Overview</h3>
 
+<AddMachine></AddMachine> 
+ @*4.1 This component is a CHILD and will need a callback to add to the Parent Overview.*@
+
 @foreach (var item in machineList.Machines)
 {
     <li>@item.Name</li>
 }
 
 
+
 @code{
+    // 4.5 https://icon-sets.iconify.design/oi/laptop/ Todo for some more icons to use.
 
     private MachineList machineList = new MachineList();
 
