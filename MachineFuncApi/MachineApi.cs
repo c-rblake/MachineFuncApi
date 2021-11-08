@@ -11,6 +11,7 @@ using MachineFuncApi.Models;
 using MachineFuncApi.Extensions;
 using Microsoft.Azure.Cosmos.Table;
 using System.Linq;
+using Microsoft.Azure.Cosmos.Table.Queryable;
 
 namespace MachineFuncApi
 {
@@ -113,6 +114,55 @@ namespace MachineFuncApi
             return new NoContentResult();                     
         }
 
-        // 2.1 ToDoQueue Trigger
+        // 2.1 ToDoQueue Trigger Blob. ctrl H + Regex  //.*
+        [FunctionName("Delete")]
+        public static async Task<IActionResult> Delete(
+            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "machines/{machineid}")] HttpRequest req,
+            [Table("Machines","Machine", "{machineid}", Connection = "AzureWebJobsStorage")] MachineTableEntity machineToRemove, //2.3 Input binder to find object. 15
+            [Table("Machines", Connection = "AzureWebJobsStorage")] CloudTable MachineTable,
+
+            string machineid,
+            ILogger log)
+        {
+            log.LogInformation($"Deleting item {machineid}");
+
+            if (string.IsNullOrWhiteSpace(machineid)) return new BadRequestResult();
+
+            // 2.2 Route one for delete. Create object to delete then delete. Not working
+            //var MachineTableEntityToDelete = new MachineTableEntity
+            //{
+            //    PartitionKey = "machines",
+            //    RowKey = machineid,
+            //    ETag = "*" // ok to delete ALL concurrent versions of this object.
+            //};
+            //var operation = TableOperation.Delete(MachineTableEntityToDelete);
+
+            var operation = TableOperation.Delete(machineToRemove);
+            await MachineTable.ExecuteAsync(operation);
+
+            return new NoContentResult();
+        }
+
+        [FunctionName("RemoveComplete")] // 2.4 Start from scratch. Creates a QUEUE
+        public static async Task RemoveComplete(
+            [TimerTrigger("0 */1 * * * *")]TimerInfo timer, // 2.5 Cron-expression 
+            [Table("Machines", Connection = "AzureWebJobsStorage")] CloudTable machineTable,
+            [Queue("MachineQueue", Connection = "AzureWebJobsStorage")] IAsyncCollector<Machine> queuedMachines, //2.6 On the fly Queue creation
+            ILogger log)
+        {
+            log.LogInformation("RemoveComplete Initiated...");
+
+            var query = machineTable.CreateQuery<MachineTableEntity>().Where(m => m.Status == Status.Offline).AsTableQuery(); // 2.7 Import Cosmos
+
+            var result = await machineTable.ExecuteQuerySegmentedAsync(query, null); // 2.8 Execute
+
+            foreach(var machineTableEntity in result)
+            {
+                await queuedMachines.AddAsync(machineTableEntity.ToMachine());
+                await machineTable.ExecuteAsync(TableOperation.Delete(machineTableEntity));
+
+            }
+        }
+            
     }
 }
