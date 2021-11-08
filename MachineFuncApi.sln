@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineFuncApi", "MachineFuncApi\MachineFuncApi.csproj", "{BEF50C0B-7EC3-4232-A70E-151A10254BA7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineParkRazor", "MachineParkRazor\MachineParkRazor.csproj", "{CA018336-4348-4727-B2EF-51EC351DAB39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineParkCore.Shared", "MachineParkCore.Shared\MachineParkCore.Shared.csproj", "{6D632E83-6F32-40DB-A57D-21AFB100941F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{BEF50C0B-7EC3-4232-A70E-151A10254BA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEF50C0B-7EC3-4232-A70E-151A10254BA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEF50C0B-7EC3-4232-A70E-151A10254BA7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA018336-4348-4727-B2EF-51EC351DAB39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA018336-4348-4727-B2EF-51EC351DAB39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA018336-4348-4727-B2EF-51EC351DAB39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA018336-4348-4727-B2EF-51EC351DAB39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D632E83-6F32-40DB-A57D-21AFB100941F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D632E83-6F32-40DB-A57D-21AFB100941F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D632E83-6F32-40DB-A57D-21AFB100941F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D632E83-6F32-40DB-A57D-21AFB100941F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

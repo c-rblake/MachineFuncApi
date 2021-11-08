@@ -39,8 +39,8 @@ namespace MachineFuncApi
         //    return new OkObjectResult(responseMessage);
         //}
 
-        [FunctionName("Create")]
-        public static async Task<IActionResult> Create(
+        [FunctionName("Post")]
+        public static async Task<IActionResult> Post(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "machines")] HttpRequest req, //localhost/api/route //TRIGGER, INPUT BINDER, OUTPUT BINDER
         // Anonymous Authorization for post to work on web?? TODO
         [Table("Machines", Connection = "AzureWebJobsStorage")] //3. DB nuggets Microsoft.Azure.Webjobs.Extensions.Storage 4.05. + Microsoft.Azure.Cosmos.Table 55
