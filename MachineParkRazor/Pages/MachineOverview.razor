@@ -1,15 +1,47 @@
 ﻿@page "/machineoverview"
 
-<h3>Machine Overview</h3>
 
-<AddMachine></AddMachine> 
- @*4.1 This component is a CHILD and will need a callback to add to the Parent Overview.*@
+<AddMachine></AddMachine>
+@*4.1 This component is a CHILD and will need a callback to add to the Parent Overview.*@
 
-@foreach (var item in machineList.Machines)
+
+<h1 class="page-title">Machine Overview</h1>
+
+@if (machineList.Machines == null)
 {
-    <li>@item.Name</li>
+    <p><em>Loading...</em></p>
 }
-
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Employee ID</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var machine in machineList.Machines)
+            {
+                <tr>
+                    <td><img src= # class="rounded-circle" /></td>
+                    <td>@machine.MachineId</td>
+                    <td>@machine.Name</td>
+                    <td>@machine.Status</td>
+                    <td>@machine.Log</td>
+                    <td>
+                        <a href="@($"mechinedetail/{machine.MachineId}")" class="btn btn-primary table-btn">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 
 @code{

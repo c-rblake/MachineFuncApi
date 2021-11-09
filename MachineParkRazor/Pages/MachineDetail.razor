@@ -1,0 +1,49 @@
+﻿@page "/machinedetail/{MachineId}"
+
+@code{ 
+    [Parameter]
+    public string MachineId { get; set; } //4.0 Passed in and captured with the Parameter attribute
+
+    public Machine Machine { get; set; } = new Machine(); //4.1 Set on Initialization
+
+    private MachineList machineList = new MachineList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        machineList = await httpClient.GetFromJsonAsync<MachineList>("api/machines");
+        Machine = machineList.Machines.FirstOrDefault(m => m.MachineId == MachineId);
+    }
+
+}
+
+<h1 class="page-title">Details for @Machine.MachineId @Machine.Name</h1>
+
+
+<div class="col-12 row">
+    <div class="col-2">
+        <img src="#" class="img-responsive rounded-circle employee-detail-img" />
+    </div>
+    <div class="col-10 row">
+        <div class="col-xs-12 col-sm-8">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Employee ID</label>
+                <div class="col-sm-8">
+                    <label type="text" class="form-control-plaintext">@Machine.MachineId</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">First name</label>
+                <div class="col-sm-8">
+                    <label type="text" readonly class="form-control-plaintext">@Machine.MachineId</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Last name</label>
+                <div class="col-sm-8">
+                    <label type="text" readonly class="form-control-plaintext">@Machine.MachineId</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
