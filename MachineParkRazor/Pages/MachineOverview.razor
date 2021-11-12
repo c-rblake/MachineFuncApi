@@ -33,9 +33,12 @@ else
                     <td>@machine.Status</td>
                     <td>@machine.Log</td>
                     <td>
-                        <a href="@($"mechinedetail/{machine.MachineId}")" class="btn btn-primary table-btn">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
+                        <!--<a href="@($"mechinedetail/{machine.MachineId}")" class="btn btn-primary table-btn">-->
+
+                        <NavLink class="nav-link" href="@($"mechinedetail/{machine.Name}")">
+                            <span class="oi oi-laptop" aria-hidden="true"></span> Machine Overview
+                        </NavLink>
+
                     </td>
                 </tr>
             }

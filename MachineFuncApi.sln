@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineFuncApi", "MachineFu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineParkCore.Shared", "MachineParkCore.Shared\MachineParkCore.Shared.csproj", "{6D632E83-6F32-40DB-A57D-21AFB100941F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MachineParkRazor", "MachineParkRazor\MachineParkRazor.csproj", "{9EC58BB7-F541-4355-BEC6-E9383DA0DE0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineParkRazor", "MachineParkRazor\MachineParkRazor.csproj", "{9EC58BB7-F541-4355-BEC6-E9383DA0DE0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -50,7 +50,7 @@ namespace MachineFuncApi
         {
             log.LogInformation("Create new Machine."); // Logs are the best, use them.
 
-            //1. No dependency Injection. Add Startup class if needed. 25
+            //1. No dependency Injection by default in functions. Add Startup class if needed. 25
             //string name = req.Query["name"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
