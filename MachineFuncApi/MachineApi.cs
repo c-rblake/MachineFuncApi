@@ -103,7 +103,7 @@ namespace MachineFuncApi
             var machine = JsonConvert.DeserializeObject<Machine>(requestBody); //26 MUST HAVE ETAG MACHINE OBJECT
             // Todo Make a MachineUpdateModel without the ID.
 
-            if (machine is null || machine.MachineId != machineid) return new BadRequestResult();
+            if (machine is null || machine.Id != machineid) return new BadRequestResult();
 
             //27. Create Table Entity
             var tableEntity = machine.ToTableEntity();

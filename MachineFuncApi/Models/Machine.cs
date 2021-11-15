@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MachineApiTwo.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,16 +7,19 @@ namespace MachineFuncApi.Models
 {
     public class Machine
     {
-        public string MachineId { get; set; }
+        public string Id;
         public string Name { get; set; }
 
-        public Status Status { get; set; } = Status.Offline;
+        public List<string> Log { get; set; }
 
-        public List<string> Log { get; set; } = new List<string>(); //null reference.
+        public bool Status { get; set; }
 
+        public DateTime? ServiceDate { get; set; } = new DateTime(1979, 07, 28);
         public Machine()
         {
-            MachineId = Guid.NewGuid().ToString("n");
+            Id = Guid.NewGuid().ToString("n");
         }
+
+        public Category Category { get; set; }
     }
 }

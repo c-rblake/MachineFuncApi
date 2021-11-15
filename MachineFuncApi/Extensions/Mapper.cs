@@ -17,11 +17,13 @@ namespace MachineFuncApi.Extensions
         {
             return new MachineTableEntity
             {
+                RowKey = machine.Id,
                 Name = machine.Name,
-                Status = machine.Status,
+                Category = machine.Category,
+                ServiceDate = machine.ServiceDate,
                 Log = machine.Log,
-                PartitionKey = "Machine",
-                RowKey = machine.MachineId
+                Status = machine.Status,
+                PartitionKey = "Machine"
             };
         }
 
@@ -29,8 +31,10 @@ namespace MachineFuncApi.Extensions
         {
             return new Machine
             {
-                MachineId = tableEntity.RowKey,
+                Id = tableEntity.RowKey,
                 Name = tableEntity.Name,
+                Category = tableEntity.Category,
+                ServiceDate = tableEntity.ServiceDate,
                 Log = tableEntity.Log,
                 Status = tableEntity.Status
             };
